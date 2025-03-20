@@ -40,7 +40,7 @@ v0.0.1
   <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
     <carbon:edit />
   </button>
-  <a href="https://github.com/k2tzumi/software-design-hierarchy" target="_blank" alt="GitHub" title="Open in GitHub"
+  <a href="https://github.com/k2tzumi/yield-deep-dive" target="_blank" alt="GitHub" title="Open in GitHub"
     class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
     <carbon-logo-github />
   </a>
