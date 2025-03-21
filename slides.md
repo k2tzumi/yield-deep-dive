@@ -156,7 +156,7 @@ transition: slide-up
 
 # 基本的な構文
 
-```php
+```php {*|1-5|7-9|2,8|3,8|4,8}{lines:true}
 function myGenerator() {
     yield 1;  // 一時停止して1を返す
     yield 2;  // 再開後、一時停止して2を返す
@@ -178,6 +178,473 @@ foreach (myGenerator() as $value) {
 - Ruby: Enumerators
 
 ---
+layout: section
+transition: fade-out
+---
+
+# yieldテスト始めるよ
+
+---
+layout: statement
+transition: fade-out
+---
+
+# 訓練されたPHPerなら余裕で答えられるよね？
+
+---
+layout: statement
+transition: slide-up
+---
+
+# 提示するコードが正常終了するか？お考えください
+`assert` 関数が全て `true` になると思ったら、ペンライトを振ってください！
+
+---
+transition: fade
+---
+
+# テスト1️⃣ （持ち時間5秒）
+変動する変数の値が返却されるよ！
+
+```php {*|2,8|3,12|4,13|5,14|*}{lines:true}
+<?php
+$simpleGenerator = function(int $i) {
+    yield $i++;     // 1回目の生成
+    yield ++$i;     // 2回目の生成
+    yield $i += 5;  // 3回目の生成
+};
+$actual = [];
+foreach ($simpleGenerator(10) as $value) {
+    $actual[] = $value;
+}
+$expected = [
+    10, // 1 回目の期待値
+    12, // 2 回目の期待値
+    17  // 3 回目の期待値
+];
+assert($expected == $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/TeZFJ](https://3v4l.org/TeZFJ)
+
+---
+layout: fact
+transition: fade
+---
+
+# ✅️ Assert Success!
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト1️⃣
+インクリメントの挙動の確認でした！
+
+---
+transition: fade
+---
+
+# テスト2️⃣ （持ち時間10秒）
+値だけじゃなくてキーも返せるよ
+
+```php {*|3,8-9,14|4,8-9,13|5,8-9,12|*}{lines:true}
+<?php
+$keyValueGenerator = function() {
+    yield 3 => '参';    // 1回目の生成
+    yield 2 => '弐';    // 2回目の生成
+    yield 1 => '壱';    // 3回目の生成
+};
+$actual = [];
+foreach ($keyValueGenerator() as $key => $value) {
+    $actual[$key] = $value; // キーを指定して生成値を格納
+}
+$expected = [
+    '壱',   // 3 回目の期待値
+    '弐',   // 2 回目の期待値
+    '参'    // 1 回目の期待値
+];
+assert($expected == $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/VlB1K](https://3v4l.org/VlB1K)
+
+---
+layout: fact
+transition: fade
+---
+
+# ❌️ Assert Fail!
+
+```log {*|2-4}
+Fatal error: Uncaught AssertionError: array (
+  3 => '参',
+  2 => '弐',
+  1 => '壱',
+) in php-wasm run script:12
+Stack trace:
+#0 php-wasm run script(12): assert(false, 'array (\n  3 => ...')
+#1 {main}
+  thrown in php-wasm run script on line 12
+```
+
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト2️⃣
+ひっかけ問題すみません。
+
+リスト（キー指定していない `$expected`）の配列キーは 0 から始まるよね。  
+以下なら Success。  
+厳密比較( `===` )すると Fail です。
+
+```php {*|3-5|12-14|16}{lines:true}
+<?php
+$keyValueGenerator = function() {
+    yield 2 => '参';    // 1回目の生成
+    yield 1 => '弐';    // 2回目の生成
+    yield 0 => '壱';    // 3回目の生成
+};
+$actual = [];
+foreach ($keyValueGenerator() as $key => $value) {
+    $actual[$key] = $value; // キーを指定して生成値を格納
+}
+$expected = [
+    2 => '参',  // 1 回目の期待値
+    1 => '弐',  // 2 回目の期待値
+    0 => '壱'   // 3 回目の期待値
+];
+assert($expected === $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/JEGt3](https://3v4l.org/JEGt3)
+
+
+---
+transition: fade
+---
+
+# テスト3️⃣ （持ち時間5秒）
+テスト 1️⃣のケースでもキーをつけるとどうなるのかな？
+
+```php {*|8-9|*}{lines:true}
+<?php
+$simpleGenerator = function(int $i) {
+    yield $i++;     // 1回目の生成
+    yield ++$i;     // 2回目の生成
+    yield $i += 5;  // 3回目の生成
+};
+$actual = [];
+foreach ($simpleGenerator(10) as $i => $value) {
+    $actual[$i] = $value;   // キーを受け取り生成値を格納
+}
+$expected = [
+    10, // 1 回目の期待値
+    12, // 2 回目の期待値
+    17  // 3 回目の期待値
+];
+assert($expected == $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/5FkJX](https://3v4l.org/5FkJX)
+
+
+---
+layout: fact
+transition: fade
+---
+
+# ✅️ Assert Success!
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト3️⃣
+
+いい感じにキーを採番してくれます
+
+
+---
+transition: fade
+---
+
+# テスト4️⃣ （持ち時間5秒）
+キーあり、なしの組み合わせ行うとどうなるか？
+
+```php {*|3,5,6,10,12,13,17,18|4,7,11,14,17,18|*}{lines:true}
+<?php
+$keyValueGenerator = function() {
+    yield 'one' => 1;   // 1: キー有り（文字列キー）
+    yield 2;            // 2: キーなし
+    yield 'three' => 3; // 3: キー有り（文字列キー）
+    yield 4 => 'four';  // 4: キー有り（数値キー）
+    yield 5;            // 5: キーなし
+};
+$expected = [
+  'one' => 1,   // 1回目の期待値
+  0 => 2,       // 2回目の期待値
+  'three' => 3, // 3回目の期待値
+  4 => 'four',  // 4回目の期待値
+  5 => 5        // 5回目の期待値
+];
+$actual = [];
+foreach ($keyValueGenerator() as $key => $value) {
+    $actual[$key] = $value; // キーを受け取り生成値を格納
+}
+assert($expected == $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/9k4Mi](https://3v4l.org/9k4Mi)
+
+---
+layout: fact
+transition: fade
+---
+
+# ✅️ Assert Success!
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト4️⃣
+PHP の配列のキーって文字列と数値が混在させることが出来てアレ
+
+キー指定がない場合、以下のルールで数値キーが自動採番させれます
+
+- キーを指定しない場合、自動的に連番(0 から) が振られる  
+`[ 'one' => 1]` の次が `[ 0 => 2 ]`  
+`yield 2` のあとに `yield 2.5` を追加した場合は　`[ 1 => 2.5 ]`　が結果に追加となる
+- 数値キーがあった場合に、そこからの連番になる  
+`[ 4 => 'four']` の次が `[ 5 => 5 ]`
+
+---
+transition: fade
+---
+
+# テスト5️⃣ （持ち時間5秒）
+値を指定しない場合はどうなるのか？
+
+```php {*|4,9,10|5,11,12|6,13,14|*}{lines:true}
+<?php
+function emptyYieldGenerator(int $case): iterable {
+    switch ($case) {
+      case 1: yield 'not empty'; break; // 値あり
+      case 2: yield; break;             // 値なし
+      default: return;                  // return
+    }
+}
+$actual = iterator_to_array(emptyYieldGenerator(1));                // case1のイテレータを配列にコピーする
+assert([ 0 => 'not empty' ] == $actual, var_export($actual, true)); // case1の期待値
+$actual = iterator_to_array(emptyYieldGenerator(2));                // case2のイテレータを配列にコピーする
+assert([] == $actual, var_export($actual, true));                   // case2の期待値
+$actual = iterator_to_array(emptyYieldGenerator(3));                // case3のイテレータを配列にコピーする
+assert([] == $actual, var_export($actual, true));                   // case3の期待値
+```
+
+[https://3v4l.org/AQPks](https://3v4l.org/AQPks)
+
+
+---
+layout: fact
+transition: fade
+---
+
+# ❌️ Assert Fail!
+
+```log {*|2}
+Fatal error: Uncaught AssertionError: array (
+  0 => NULL,
+) in /in/AQPks:12
+Stack trace:
+#0 /in/AQPks(12): assert(false, 'array (\n  0 => ...')
+#1 {main}
+  thrown in /in/AQPks on line 12
+
+Process exited with code 255.
+```
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト5️⃣
+switch 文だと break しないと連続して yield されるので注意
+
+2 回目の assert は　`[ 0 => null ]` になる
+- `yield null` する場合と同義  
+null が返却される
+- `return` はまた挙動が違う  
+要素自体が返却されない
+
+
+---
+layout: section
+transition: fade-out
+---
+
+# ここまで余裕だよね？
+
+---
+layout: statement
+transition: fade-out
+---
+
+# 少しだけ難易度上げるよ
+
+
+---
+transition: fade
+---
+
+# テスト6️⃣ （持ち時間10秒）
+yield from という書き方もあります
+
+```php {*|3,4,8,14|10,16|*}{lines:true}
+<?php
+function innerGenerator(): iterable {
+    yield 'a' => 1; // 1: 通常
+    yield 'b' => 2; // 2: 通常
+}
+function outerGenerator(): iterable {
+    yield 'x' => 0;                   // 1: 通常
+    yield from innerGenerator();      // 2: ジェネレータをまとめてyield
+    yield 'y' => 3;                   // 3: 通常
+    yield from ['c' => 4, 'd' => 5];  // 4: 配列をまとめてyield
+}
+$expected = [
+    'x' => 0,             // outer1回目の期待値
+    'a' => 1, 'b' => 2,   // outer2回目の期待値（innerの1,2回目）
+    'y' => 3,             // outer3回目の期待値
+    'c' => 4, 'd' => 5    // outer4回目の期待値（配列の1,2回目）
+];
+$actual = iterator_to_array(outerGenerator());  // outerGeneratorのイテレータを配列にコピーする
+assert($expected === $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/UKodH](https://3v4l.org/UKodH)
+
+
+---
+layout: fact
+transition: fade
+---
+
+# ✅️ Assert Success!
+今回は厳密比較でも OK です
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト6️⃣
+まとめて yield させることもできます
+
+yield from キーワードを使ってジェネレータの委譲が出来ます。
+
+ 外側のジェネレータは、内側のジェネレータ (あるいはオブジェクトや配列) から受け取れるすべての値を yield し、 何も取得できなくなったら外側のジェネレータの処理を続行します。
+
+
+---
+transition: fade
+---
+
+# テスト7️⃣ （持ち時間10秒）
+yield from でキー指定ありなしを混在させるとどうなるか？
+
+```php {*|3,4,12,14,17,19|7,8,11,13,16,18|*}{lines:true}
+<?php
+function generatorWithKeys(): iterable {  // キーありジェネレータ
+    yield "a" => 1;
+    yield "b" => 2;
+}
+function generatorWithoutKeys(): iterable { // キーなしジェネレータ
+    yield 3;
+    yield 4;
+}
+function mixedGenerator(): iterable {
+    yield from [5, 6];                  // 1: 配列（キーなし）からyield from
+    yield from generatorWithKeys();     // 2: キーありジェネレータからyield from
+    yield from generatorWithoutKeys();  // 3: キーなしジェネレータからyield from
+    yield from ["c" => 7, "d" => 8];    // 4: 配列（キーあり）からyield from
+}
+$expected = [ 0 => 5, 1 => 6, // mixed1回目の期待値
+  'a' => 1, 'b' => 2,         // mixed2回目の期待値
+  2 => 3, 3 => 4,             // mixed3回目の期待値
+  'c' => 7, 'd' => 8 ];       // mixed4回目の期待値
+$actual = iterator_to_array(mixedGenerator());  // イテレータを配列にコピーする
+assert($expected === $actual, var_export($actual, true));
+```
+
+[https://3v4l.org/1Sm6S](https://3v4l.org/1Sm6S)
+
+
+---
+layout: fact
+transition: fade
+---
+
+# ❌️ Assert Fail!
+
+```log {*|2-7}
+Fatal error: Uncaught AssertionError: array (
+  0 => 3,
+  1 => 4,
+  'a' => 1,
+  'b' => 2,
+  'c' => 7,
+  'd' => 8,
+) in /in/H0kbG:22
+Stack trace:
+#0 /in/H0kbG(22): assert(false, 'array (\n  0 => ...')
+#1 {main}
+  thrown in /in/H0kbG on line 22
+
+Process exited with code 255.
+```
+
+---
+layout: center
+transition: slide-up
+---
+
+# テスト7️⃣ 
+結果わかりづらいけれど。。
+
+- キーの自動採番ルールはジェネレータ関数毎に適用される  
+mixedGenerator と generatorWithoutKeys のキーの採番は独立する
+- yield from で委譲した結果のキーは引き継がれる  
+generatorWithoutKeys の結果が　`[ 2 => 3, 3 => 4]` ではなく `[ 0 => 3, 1 => 4]`
+- ジェネレータのキーの重複は OK  
+通常の array では定義出来ないけれど、以下が返却されている  
+`[ 0 => 3, 1 => 4, 'a' => 1, 'b' => 2, 0 => 3, 1 => 4, 'c' => 7, 'd' => 8]`  
+キーの 0 と 1 が重複して出現している
+
+---
+layout: section
+transition: fade-out
+---
+
+# まだまだ中級だね
+
+---
+layout: section
+transition: fade-out
+---
+
+# 基本構文だけじゃきついかな？ｗｗｗ
+Iteratorインターフェースを覚えよう
+
+---
 
 # イテレータとは？
 一言で言うと...
@@ -197,7 +664,7 @@ foreach (myGenerator() as $value) {
 
 # PHPのIteratorインターフェース
 
-```php
+```php {*}{lines:true}
 interface Iterator extends Traversable {
     public function current();  // 現在の要素を返す
     public function key();      // 現在のキーを返す
@@ -211,7 +678,7 @@ interface Iterator extends Traversable {
 
 # イテレータの実装例
 
-```php
+```php {*}{lines:true}
 // カスタムイテレータ
 $it = new ArrayIterator([1, 2, 3]);
 
@@ -229,394 +696,160 @@ while ($it->valid()) {
 ```
 
 ---
-
-# yieldテスト始めるよ
-
+transition: slide-up
 ---
 
-# 訓練されたPHPerなら余裕で答えられるよね？
+# Iteratorインターフェースと関連クラス図
+GeneratorクラスはIteratorインターフェースを実装しています
 
----
-
-# 提示するコードが正常終了するか？お考えください
-`assert` 関数が全て `true` になると思ったら、ペンライトを振ってください！
-
----
-
-# テスト1️⃣ （持ち時間5秒）
-変動する変数の値が返却されるよ！
-
-```php {lines:true}
-<?php
-$simpleGenerator = function(int $i) {
-    yield $i++;
-    yield ++$i;
-    yield $i += 5;
-};
-$actual = [];
-foreach ($simpleGenerator(10) as $value) {
-    $actual[] = $value;
-}
-assert([10, 12, 17] == $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/rVs2H](https://3v4l.org/rVs2H)
-
----
-
-# ✅️ Assert Success!
-
----
-
-# テスト1️⃣
-インクリメントの挙動の確認でした！
-
----
-
-# テスト2️⃣ （持ち時間10秒）
-値だけじゃなくてキーも返せるよ
-
-```php
-<?php
-$keyValueGenerator = function() {
-    yield 3 => '参';
-    yield 2 => '弐';
-    yield 1 => '壱';
-};
-$actual = [];
-foreach ($keyValueGenerator() as $key => $value) {
-    $actual[$key] = $value;
-}
-$expected = ['壱', '弐', '参'];
-assert($expected == $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/P4Qag](https://3v4l.org/P4Qag)
-
----
-
-# ❌️ Assert Fail!
-
-```
-Fatal error: Uncaught AssertionError: array (
-  3 => '参',
-  2 => '弐',
-  1 => '壱',
-) in php-wasm run script:12
-Stack trace:
-#0 php-wasm run script(12): assert(false, 'array (\n  3 => ...')
-#1 {main}
-  thrown in php-wasm run script on line 12
-```
-
----
-
-# テスト2️⃣
-ひっかけ問題すみません。
-
-リスト（キー指定していない `$expected`）の配列キーは 0 から始まるよね。  
-以下なら Success。  
-厳密比較( `===` )すると Fail です。
-
-```php
-<?php
-$keyValueGenerator = function() {
-    yield 2 => '参';
-    yield 1 => '弐';
-    yield 0 => '壱';
-};
-$actual = [];
-foreach ($keyValueGenerator() as $key => $value) {
-    $actual[$key] = $value;
-}
-$expected = ['壱', '弐', '参'];
-assert($expected == $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/jE5nc](https://3v4l.org/jE5nc)
-
----
-
-# テスト3️⃣ （持ち時間5秒）
-テスト 1️⃣のケースでもキーをつけるとどうなるのかな？
-
-```php
-<?php
-$simpleGenerator = function(int $i) {
-    yield $i++;
-    yield ++$i;
-    yield $i += 5;
-};
-$actual = [];
-foreach ($simpleGenerator(10) as $i => $value) {
-    $actual[$i] = $value;
-}
-assert([10, 12, 17] == $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/47XGv](https://3v4l.org/47XGv)
-
-
----
-
-# ✅️ Assert Success!
-
----
-
-# テスト3️⃣
-
-いい感じにキーを採番してくれます
-
-----
-
-# テスト4️⃣ （持ち時間5秒）
-キーあり、なしの組み合わせ行うとどうなるか？
-
-```php
-<?php
-$keyValueGenerator = function() {
-    yield 'one' => 1;
-    yield 2;
-    yield 'three' => 3;
-    yield 4 => 'four';
-    yield 5;
-};
-$actual = [];
-$expected = [
-  'one' => 1,
-  0 => 2,
-  'three' => 3,
-  4 => 'four',
-  5 => 5
-];
-foreach ($keyValueGenerator() as $i => $value) {
-    $actual[$i] = $value;
-}
-assert($expected == $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/ljfnq](https://3v4l.org/ljfnq)
-
----
-
-# テスト4️⃣
-PHP の配列のキーって文字列と数値が混在させることが出来てアレ
-
-キー指定がない場合、以下のルールで数値キーが自動採番させれます
-
-- キーを指定しない場合、自動的に連番(0 から) が振られる  
-`[ 'one' => 1]` の次が `[ 0 => 2 ]`  
-`yield 2` のあとに `yield 2.5` を追加した場合は　`[ 1 => 2.5 ]`　が結果に追加となる
-- 数値キーがあった場合に、そこからの連番になる  
-`[ 4 => 'four']` の次が `[ 5 => 5 ]`
-
----
-
-# テスト5️⃣ （持ち時間5秒）
-値を指定しない場合はどうなるのか？
-
-```php
-<?php
-function emptyYieldGenerator(int $case): iterable {
-    switch ($case) {
-      case 1: yield 'not empty'; break;
-      case 2: yield; break;
-      default: return;
+```mermaid
+classDiagram
+    class Traversable {
+        <<interface>>
     }
-}
-function assertGeneratorOutput(int $case, array $expected): void {
-    $actual = [];
-    foreach (emptyYieldGenerator($case) as $key => $value) $actual[$key] = $value;
-    assert($expected == $actual, var_export($actual, true));
-}
-
-assertGeneratorOutput(1, [ 0 => 'not empty' ]);
-assertGeneratorOutput(2, []);
-assertGeneratorOutput(3, []);
+    
+    class Iterator {
+        <<interface>>
+        +current() : mixed
+        +key() : mixed
+        +next() : void
+        +rewind() : void
+        +valid() : bool
+    }
+    
+    class IteratorAggregate {
+        <<interface>>
+        +getIterator() : Traversable
+    }
+    
+    class SeekableIterator {
+        <<interface>>
+        +seek(position : int) : void
+    }
+    
+    class OuterIterator {
+        <<interface>>
+        +getInnerIterator() : Iterator
+    }
+    
+    class RecursiveIterator {
+        <<interface>>
+        +hasChildren() : bool
+        +getChildren() : RecursiveIterator
+    }
+    
+    class Generator {
+        +send(value : mixed) : mixed
+        +throw(exception : Throwable) : mixed
+        +getReturn() : mixed
+    }
+    
+    class IteratorIterator {
+        +__construct(iterator : Traversable)
+        #getInnerIterator() : Iterator
+    }
+    
+    class ArrayIterator {
+        +__construct(array : array)
+        +append(value : mixed) : void
+        +asort() : void
+        +count() : int
+        +current() : mixed
+        +getArrayCopy() : array
+        +getFlags() : int
+        +key() : mixed
+        +ksort() : void
+        +natcasesort() : void
+        +natsort() : void
+        +next() : void
+        +offsetExists(offset : mixed) : bool
+        +offsetGet(offset : mixed) : mixed
+        +offsetSet(offset : mixed, value : mixed) : void
+        +offsetUnset(offset : mixed) : void
+        +rewind() : void
+        +seek(position : int) : void
+        +serialize() : string
+        +setFlags(flags : int) : void
+        +uasort(cmp_function : callable) : void
+        +uksort(cmp_function : callable) : void
+        +unserialize(serialized : string) : void
+        +valid() : bool
+    }
+    
+    class RecursiveArrayIterator {
+        +hasChildren() : bool
+        +getChildren() : RecursiveArrayIterator
+    }
+    
+    class FilterIterator {
+        +__construct(iterator : Iterator)
+        +accept() : bool
+        #getInnerIterator() : Iterator
+    }
+    
+    Traversable <|-- Iterator
+    Traversable <|-- IteratorAggregate
+    Iterator <|-- SeekableIterator
+    Iterator <|-- OuterIterator
+    Iterator <|-- RecursiveIterator
+    Iterator <|-- Generator
+    Iterator <|-- IteratorIterator
+    SeekableIterator <|-- ArrayIterator
+    ArrayIterator <|-- RecursiveArrayIterator
+    OuterIterator <|-- FilterIterator
+    IteratorIterator <|-- FilterIterator
 ```
 
-[https://3v4l.org/9kiQO](https://3v4l.org/9kiQO)
-
 
 ---
-
-# ❌️ Assert Fail!
-
-```
-Fatal error: Uncaught AssertionError: array (
-  0 => NULL,
-) in /in/9kiQO:12
-Stack trace:
-#0 /in/9kiQO(12): assert(false, 'array (\n  0 => ...')
-#1 /in/9kiQO(16): assertGeneratorOutput(2, Array)
-#2 {main}
-  thrown in /in/9kiQO on line 12
-
-Process exited with code 255.
-```
-
----
-
-# テスト5️⃣
-switch 文だと break しないと連続して yield されるので注意
-
-2 回目の assert は　`[ 0 => null ]` になる
-- `yield null` する場合と同義  
-null が返却される
-- `return` はまた挙動が違う  
-要素自体が返却されない
-
----
-
-# テスト6️⃣ （持ち時間10秒）
-yield from という書き方もあります
-
-```php
-<?php
-function innerGenerator(): iterable {
-    yield 'a' => 1;
-    yield 'b' => 2;
-}
-function outerGenerator(): iterable {
-    yield 'x' => 0;
-    yield from innerGenerator();
-    yield 'y' => 3;
-    yield from ['c' => 4, 'd' => 5];    // 配列からのyield
-}
-$expected = [
-    'x' => 0,
-    'a' => 1, 'b' => 2,
-    'y' => 3,
-    'c' => 4, 'd' => 5
-];
-$actual = [];
-foreach (outerGenerator() as $key => $value) $actual[$key] = $value;
-assert($expected === $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/mfpRU](https://3v4l.org/mfpRU)
-
-
----
-
-# ✅️ Assert Success!
-今回は厳密比較でも OK です
-
----
-
-# テスト6️⃣
-まとめて yield させることもできます
-
-yield from キーワードを使ってジェネレータの委譲が出来ます。
-
- 外側のジェネレータは、内側のジェネレータ (あるいはオブジェクトや配列) から受け取れるすべての値を yield し、 何も取得できなくなったら外側のジェネレータの処理を続行します。
-
----
-
-# テスト7️⃣ （持ち時間10秒）
-yield from でキー指定ありなしを混在させるとどうなるか？
-
-```php
-<?php
-function generatorWithKeys(): iterable {
-    yield "a" => 1;
-    yield "b" => 2;
-}
-function generatorWithoutKeys(): iterable {
-    yield 3;
-    yield 4;
-}
-function mixedGenerator(): iterable {
-    yield from [5, 6];  // 配列（キーなし）からyield from
-    yield from generatorWithKeys(); // キーありジェネレータからyield from
-    yield from generatorWithoutKeys();  // キーなしジェネレータからyield from
-    yield from ["c" => 7, "d" => 8];  // 配列（キーあり）からyield from
-}
-$expected = [0 => 5, 1 => 6,
-    'a' => 1, 'b' => 2,
-    2 => 3, 3 => 4,
-    'c' => 7, 'd' => 8];
-$actual = [];
-foreach (mixedGenerator() as $key => $value) $actual[$key] = $value;
-assert($expected === $actual, var_export($actual, true));
-```
-
-[https://3v4l.org/H0kbG](https://3v4l.org/H0kbG)
-
----
-
-# ❌️ Assert Fail!
-
-```
-Fatal error: Uncaught AssertionError: array (
-  0 => 3,
-  1 => 4,
-  'a' => 1,
-  'b' => 2,
-  'c' => 7,
-  'd' => 8,
-) in /in/H0kbG:22
-Stack trace:
-#0 /in/H0kbG(22): assert(false, 'array (\n  0 => ...')
-#1 {main}
-  thrown in /in/H0kbG on line 22
-
-Process exited with code 255.
-```
-
----
-
-# テスト7️⃣ 
-結果わかりづらいけれど。。
-
-- キーの自動採番ルールはジェネレータ関数毎に適用される  
-mixedGenerator と generatorWithoutKeys のキーの採番は独立する
-- yield from で委譲した結果のキーは引き継がれる  
-generatorWithoutKeys の結果が　`[ 2 => 3, 3 => 4]` ではなく `[ 0 => 3, 1 => 4]`
-- ジェネレータのキーの重複は OK  
-通常の array では定義出来ないけれど、以下が返却されている  
-`[ 0 => 3, 1 => 4, 'a' => 1, 'b' => 2, 0 => 3, 1 => 4, 'c' => 7, 'd' => 8]`  
-キーの 0 と 1 が重複して出現している
-
+transition: fade
 ---
 
 # テスト8️⃣ （持ち時間10秒）
 return を組み合わせて利用する
 
-```php
+```php {*|6,12|3-5,10|6,13|*}{lines:true}
 <?php
 $generatorWithReturn = function() {
-    yield 1;
-    yield 2;
-    yield 3;
-    return ['a' => 4, 'b' => 5];
+    yield 1;                      // 1回目生成
+    yield 2;                      // 2回目生成
+    yield 3;                      // 3回目生成
+    return ['a' => 4, 'b' => 5];  // 最後にreturn
 };
-$gen = $generatorWithReturn();
-$actual = iterator_to_array($gen);
-assert([1, 2, 3] === $actual, var_export($actual, true));
-$actual = $gen->getReturn();
-assert([ 1, 2 , 3, 'a' => 4, 'b' => 5] == $actual, var_export($actual, true));
+$gen = $generatorWithReturn();      // ジェネレータ関数インスタンス化
+$actual = iterator_to_array($gen);  // イテレータを配列にコピーする
+$expected = [1, 2, 3];              // 1〜3回までの期待値
+assert($expected === $actual, var_export($actual, true)); 
+$actual = $gen->getReturn();        // Generator::getReturn ジェネレータの戻り値を取得する
+$expected = [ 1, 2 , 3, 'a' => 4, 'b' => 5]; // return部分の期待値
+assert($expected == $actual, var_export($actual, true));
 ```
 
-[https://3v4l.org/4tAN5](https://3v4l.org/4tAN5)
+[https://3v4l.org/LXSYD](https://3v4l.org/LXSYD)
 
+---
+layout: fact
+transition: fade
 ---
 
 # ❌️ Assert Fail!
 
-```
+```log {*|2,3}
 Fatal error: Uncaught AssertionError: array (
   'a' => 4,
   'b' => 5,
-) in /in/4tAN5:12
+) in /in/LXSYD:14
 Stack trace:
-#0 /in/4tAN5(12): assert(false, 'array (\n  'a' =...')
+#0 /in/LXSYD(14): assert(false, 'array (\n  'a' =...')
 #1 {main}
-  thrown in /in/4tAN5 on line 12
+  thrown in /in/LXSYD on line 14
 
 Process exited with code 255.
 ```
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト8️⃣
@@ -634,45 +867,53 @@ return の返り値は無視される
 例外処理と組み合わせて、エラー情報や処理結果を返す
 
 ---
+transition: fade
+---
 
 # テスト9️⃣ （持ち時間5秒）
 ジェネレータ関数を連続で呼び出した場合
 
-```php
+```php {*|2-7|8-11|12-14|15-|*}{lines:true}
 <?php
-$i = 1;
-$generator = function() use($i) {
+$i = 1; // カウンター初期化
+$generator = function() use($i) { // カウンター参照
     yield $i++;
     yield $i++;
     yield $i++;
 };
-$gen = $generator();
-$actual = iterator_to_array($gen);
-assert([1, 2, 3] === $actual, var_export($actual, true));
-assert(1 === $i);
-$gen = $generator();
-$actual = iterator_to_array($gen);
-assert([1, 2, 3] === $actual, var_export($actual, true));
-$actual = iterator_to_array($gen);
-assert([1, 2, 3] === $actual, var_export($actual, true));
+$gen = $generator();  // ジェネレータ関数インスタンス化
+$actual = iterator_to_array($gen);  // 1: イテレータを配列にコピーする
+assert([1, 2, 3] === $actual, var_export($actual, true)); // 最初の呼び出しの期待値
+assert(1 === $i);     // カウンターの状態を確認
+$gen = $generator();  // ジェネレータ関数を再生成
+$actual = iterator_to_array($gen);  // 2: イテレータを配列にコピーする
+assert([1, 2, 3] === $actual, var_export($actual, true)); // ２回目の呼び出しの期待値
+$actual = iterator_to_array($gen);  // 3: 連続してジェネレータを呼び出し
+assert([1, 2, 3] === $actual, var_export($actual, true)); // 3 回目の呼び出しの期待値
 ```
 
-[https://3v4l.org/Q2WKQu](https://3v4l.org/Q2WKQu)
+[https://3v4l.org/FADKd](https://3v4l.org/FADKd)
 
+---
+layout: fact
+transition: fade
 ---
 
 # ❌️ Assert Fail!
 
-```
-Fatal error: Uncaught Exception: Cannot traverse an already closed generator in /in/Q2WKQu:15
+```log {*|1}
+Fatal error: Uncaught Exception: Cannot traverse an already closed generator in /in/FADKd:15
 Stack trace:
-#0 /in/Q2WKQu(15): iterator_to_array(Object(Generator))
+#0 /in/FADKd(15): iterator_to_array(Object(Generator))
 #1 {main}
-  thrown in /in/Q2WKQu on line 15
+  thrown in /in/FADKd on line 15
 
 Process exited with code 255.
 ```
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト9️⃣
@@ -686,47 +927,69 @@ use は値渡し
 `Cannot traverse an already closed generator`
 
 ---
+layout: section
+transition: fade-out
+---
+
+# ギブアップしてもいいのよ？
+
+---
+layout: section
+transition: fade-out
+---
+
+# 一気に難易度あげちゃうよ
+
+---
+transition: fade
+---
 
 # テスト🔟 （持ち時間10秒）
 テスト 9️⃣を参照渡しにするとどうなるか？
 
-```php
+```php {*|3|8-11|12-14|15-17|*}{lines:true}
 <?php
-$i = 1;
+$i = 1; // カウンター初期化
 $generator = function() use(&$i) { // 参照渡しに変更
     yield $i++;
     yield $i++;
     yield $i++;
 };
-$gen = $generator();
-$actual = iterator_to_array($gen);
-assert([1, 2, 3] === $actual, var_export($actual, true));
-assert(4 === $i);
-$gen = $generator();
-$actual = iterator_to_array($gen);
-assert([4, 5, 6] === $actual, var_export($actual, true));
-$gen->rewind(); // 最初に巻き戻す
-$actual = iterator_to_array($gen);
-assert([7, 8, 9] === $actual, var_export($actual, true));
+$gen = $generator();  // ジェネレータ関数インスタンス化
+$actual = iterator_to_array($gen);  // 1: イテレータを配列にコピーする
+assert([1, 2, 3] === $actual, var_export($actual, true)); // 最初の呼び出しの期待値
+assert(4 === $i);     // カウンターの状態を確認
+$gen = $generator();  // ジェネレータ関数を再生成
+$actual = iterator_to_array($gen);  // 2: イテレータを配列にコピーする
+assert([4, 5, 6] === $actual, var_export($actual, true)); // ２回目の呼び出しの期待値
+$gen->rewind();                     // Generator::rewind 最初に巻き戻す
+$actual = iterator_to_array($gen);  // 3: 連続してジェネレータを呼び出し
+assert([7, 8, 9] === $actual, var_export($actual, true)); // 3 回目の呼び出しの期待値
 ```
 
-[https://3v4l.org/Z2d4A](https://3v4l.org/Z2d4A)
+[https://3v4l.org/hIJq1](https://3v4l.org/hIJq1)
 
 
+---
+layout: fact
+transition: fade
 ---
 
 # ❌️ Assert Fail!
 
-```
-Fatal error: Uncaught Exception: Cannot rewind a generator that was already run in /in/Z2d4A:15
+```log {*|1}
+Fatal error: Uncaught Exception: Cannot rewind a generator that was already run in /in/hIJq1:15
 Stack trace:
-#0 /in/Z2d4A(15): Generator->rewind()
+#0 /in/hIJq1(15): Generator->rewind()
 #1 {main}
-  thrown in /in/Z2d4A on line 15
+  thrown in /in/hIJq1 on line 15
 
 Process exited with code 255.
 ```
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト🔟 
@@ -741,37 +1004,45 @@ Generator オブジェクトだったら問題ない！
 - 正しい使い方としては、新しいジェネレータインスタンスを作成する必要がある
 
 ---
+transition: fade
+---
 
 # テスト⑪ （持ち時間10秒）
 foreach を使わずに手続き的に書いてみる
 
-```php
+```php {*|2,7,8|4,9-11|5,12-14|6,15-|*}{lines:true}
 <?php
-$i = 1;
-$generator = function() use(&$i) {
-    yield 'key1' => $i++;
-    yield 'key2' => $i++;
+$i = 1; // カウンター初期化
+$generator = function() use(&$i) {  // 参照渡し
+    yield 'key1' => $i++; // 最初のyield
+    yield 'key2' => $i++; // ２つ目のyield
 };
-$gen = $generator();
-assert($i === 1);
-$gen->rewind();
-assert($i === 2);
-assert($gen->current() === 1 && $gen->key() === 'key1' && $gen->valid());
-$gen->next();
-assert($i === 3);
-assert($gen->current() === 2 && $gen->key() === 'key2' && $gen->valid());
-$gen->next();
-assert($i === 3);
-assert($gen->current() === NULL && $gen->key() === NULL && $gen->valid() === false);
+$gen = $generator();  // イテレータ生成
+assert($i === 1);     // カウンターは変動なし
+$gen->rewind();       // 最初のyieldまで実行する
+assert($i === 2);     // カウンターはインクリメントされる
+assert($gen->current() === 1 && $gen->key() === 'key1' && $gen->valid()); // 最初のyieldの期待値
+$gen->next();         // 次のyieldまで実行する
+assert($i === 3);     // カウンターはインクリメントされる
+assert($gen->current() === 2 && $gen->key() === 'key2' && $gen->valid()); // ２つのyieldの期待値
+$gen->next();         // 次のyieldまで実行する
+assert($i === 3);     // カウンターは変動せず
+assert($gen->current() === NULL && $gen->key() === NULL && $gen->valid() === false);  // 最終の期待値
 ```
 
-[https://3v4l.org/DiC1d](https://3v4l.org/DiC1d)
+[https://3v4l.org/PVN1G](https://3v4l.org/PVN1G)
 
+---
+layout: fact
+transition: fade
 ---
 
 # ✅️ Assert Success!
 Iterator インターフェイスの使い方がわかっていいね
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト⑪
@@ -791,7 +1062,7 @@ foreach の内部がどうやって動いているか、おわかり頂けただ
 # テスト⑪
 Iterator インターフェースを利用して for 文で書き直す！
 
-```php
+```php {*|9-11}{lines:true}
 <?php
 $generator = function() {
     yield 'key1' => 1;
@@ -815,54 +1086,76 @@ assert($expected === $actual, var_export($actual, true));
 [https://3v4l.org/6vco4](https://3v4l.org/6vco4)
 
 ---
+layout: section
+transition: fade-out
+---
+
+# おわりだよ
+
+---
+layout: section
+transition: fade-out
+---
+
+# いや嘘だよ
+
+---
+transition: fade
+---
 
 # テスト⑫ （持ち時間10秒）
 参照を返すジェネレータだと。。？
 
-```php
+```php {*|2,11|3,4,17|5,6,13,14,18|7,8,13,14,19|*}{lines:true}
 <?php
-function &referenceValueGenerator(): iterable {
-    list($key, $value) = ['key1', 1];
-    yield $key => $value;
-    list($key, $value) = [$key.'2', $value + 1];
-    yield $key => $value;
-    list($key, $value) = [$key.'3', $value + 2];
-    yield $key => $value;
+function &referenceValueGenerator(): iterable {   // 参照を返すジェネレータ
+    list($key, $value) = ['key1', 1];             // keyとvalueをセット
+    yield $key => $value;             // 1回目の生成
+    list($key, $value) = [$key.'2', $value + 1];  // keyとvalueをセット
+    yield $key => $value;             // ２回目の生成
+    list($key, $value) = [$key.'3', $value + 2];  // keyとvalueをセット
+    yield $key => $value;             // 3回目の生成
 }
 $actual = [];
-foreach (referenceValueGenerator() as $key => &$value ) {
-    $actual[$key] = $value;
-    $value *= 10;
-    $kye = "kee";
+foreach (referenceValueGenerator() as $key => &$value ) { // 値を参照で受け取り
+    $actual[$key] = $value; // valueをkey指定で格納
+    $value *= 10;           // valueを10倍
+    $kye = "kee";           // keyを変更
 }
 $expected = [
-    'key1' => 1,
-    'kee2' => 11,
-    'kee3' => 112
+    'key1' => 1,    // 1回目の期待値
+    'kee2' => 11,   // 2回目の期待値
+    'kee3' => 112   // 3回目の期待値
 ];
 assert($expected === $actual, var_export($actual, true));
 ```
 
-[https://3v4l.org/4Hqs8](https://3v4l.org/4Hqs8)
+[https://3v4l.org/TAL1W](https://3v4l.org/TAL1W)
 
+---
+layout: fact
+transition: fade
 ---
 
 # ❌️ Assert Fail!
 
-```
+```log {*|2-4}
 Fatal error: Uncaught AssertionError: array (
   'key1' => 1,
   'key12' => 11,
   'key123' => 112,
-) in /in/4Hqs8:21
+) in /in/TAL1W:21
 Stack trace:
-#0 /in/4Hqs8(21): assert(false, 'array (\n  'key1...')
+#0 /in/TAL1W(21): assert(false, 'array (\n  'key1...')
 #1 {main}
-  thrown in /in/4Hqs8 on line 21
+  thrown in /in/TAL1W on line 21
 
 Process exited with code 255.
 ```
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト⑫
@@ -877,41 +1170,49 @@ Process exited with code 255.
 - キー値は値渡しになるので上書きしても変動しない
 
 ---
+transition: fade
+---
 
 # テスト⑬ （持ち時間10秒）
 双方向通信をもっとスマートにやるには？
 
-```php
+```php {*|6,16,17|2-6,15,20|6,9,16,20|6,8,17,20|6,8,18-20|*}{lines:true}
 <?php
 function communicatingGenerator(array $data = [1, 2, 3, 4]): Generator {
     $i = 0;
     $mode = null;
     do {
-        $received = yield $data[$i];
+        $received = yield $data[$i];      // yieldの結果(send)を受け取り
         switch ($received ?? $mode) {
-            case 'rev': $i--; $mode = 'rev'; break;
-            case 'skip': $i += ($mode == 'rev' ? -2 : 2); break;
-            default: $i++; $mode = 'fwd'; break;
+            case 'rev': $i--; $mode = 'rev'; break;               // 逆戻し
+            case 'skip': $i += ($mode == 'rev' ? -2 : 2); break;  // スキップ
+            default: $i++; $mode = 'fwd'; break;                  // 順送り
         }
-    } while ($i < 4 && $i >= 0);
+    } while ($i < count($data) && $i >= 0);  // 配列インデックスの境界判定
 }
 $gen = communicatingGenerator();
-$actual = [$gen->current(), // 1件目
-  $gen->send("skip"),   // 2件目
-  $gen->send("rev")];   // 3件目
-$gen->next();
-$actual[] = $gen->current();    // 4件目
-$expected = [1, 3, 2, 1];
+$actual = [$gen->current(),   // 1回目生成
+  $gen->send('skip'),         // 2回目生成
+  $gen->send('rev')];         // 3回目生成
+$gen->next();                 // 4回目生成
+$actual[] = $gen->current();  // 4回目の結果取得
+$expected = [1, 3, 2, 1];     // 1〜4回の生成の期待値
 assert($expected === $actual, var_export($actual, true));
 ```
 
-[https://3v4l.org/grWsu](https://3v4l.org/grWsu)
+[https://3v4l.org/vcmul](https://3v4l.org/vcmul)
 
+---
+layout: fact
+transition: fade
 ---
 
 # ✅️ Assert Success!
 Genarator::send()を利用して、順（逆）送りと skip を実現
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト⑬
@@ -928,39 +1229,47 @@ Genarator::send()を利用して、順（逆）送りと skip を実現
   - 複雑な計算を段階的に進められる
 
 ---
+transition: fade
+---
 
 # テスト⑭ （持ち時間10秒）
 例外も差し込めたりする
 
-```php
+```php {*|15|2-7,13,17|6,8-10,15,18|*}{lines:true}
 <?php
 function exceptionHandlingGenerator(array $data = [1, 2, 3]): Generator {
   $seek = 0;
   try {
     for ($seek = 0; $seek < count($data);) {
-      $seek = yield $data[$seek];
+      $seek = yield $data[$seek];   // yield結果を受け取り
     }
-  } catch (Throwable $e) {
-    return $data;
+  } catch (Exception $e) {
+    return $data;   // 例外が発生した場合はretrun
   }
 }
 $gen = exceptionHandlingGenerator();
-$actual = [$gen->current(), $gen->send(2)];
+$actual = [$gen->current(), $gen->send(2)]; // 1回目、2回目(seekを2)
 try {
-  $gen->throw(new Exception());
+  $gen->throw(new Exception()); // 例外をジェネレータにスローする
 } catch (Throwable $e) {
-  assert([1, 2, 3] == $gen->getReturn(), var_export($gen->getReturn(), true));
-  assert([1, 3] === $actual, var_export($actual, true));
+  assert([1, 3] === $actual, var_export($actual, true));    // 生成値の期待値
+  assert([1, 2, 3] == $gen->getReturn(), var_export($gen->getReturn(), true));  // 戻り値の期待値
 }
 ```
 
-[https://3v4l.org/Vg18X](https://3v4l.org/Vg18X)
+[https://3v4l.org/hbWPu](https://3v4l.org/hbWPu)
 
+---
+layout: fact
+transition: fade
 ---
 
 # ✅️ Assert Success!
 Genarator::throw()を利用して、例外処理もできる
 
+---
+layout: center
+transition: slide-up
 ---
 
 # テスト⑭
@@ -969,3 +1278,24 @@ throw
 - `throw()` メソッドでジェネレータ内に例外を注入します
 - 注入された例外は、ジェネレータ内の実行中のコンテキストで発生します
 - ジェネレータ内で例外をキャッチしない場合、例外は呼び出し元に伝播します
+
+
+---
+layout: section
+transition: fade-out
+---
+
+# ここまでできたなら
+
+---
+layout: section
+transition: fade-out
+---
+
+# 合格
+
+---
+layout: end
+---
+
+# Fin
