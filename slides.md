@@ -141,7 +141,7 @@ transition: slide-up
 # Yield is 何？🤔
 一言で言うと...
 
-「**データを一つずつ返す仕組み**」 🔄
+「**データを一つずつ返す仕組み**」🔄
 
 ---
 
@@ -300,7 +300,7 @@ transition: slide-up
 
 リスト（キー指定していない `$expected`）の <span v-mark.circle.red="1">配列キーは 0 から始まる</span>よね。  
 以下のコードなら Success ✅️  
-並び順を揃えると厳密比較( `===` )させてもOK🙆
+並び順を揃えると厳密比較( `===` )させても OK🙆
 
 ```php {*|3-5|12-14|16}{lines:true}
 <?php
@@ -329,7 +329,7 @@ transition: fade
 ---
 
 # テスト3️⃣ （持ち時間⏱️5秒）
-テスト 1️⃣のケースでもキーをつけるとどうなるのかな？ 🤨
+テスト 1️⃣のケースでもキーをつけるとどうなるのかな？　🤨
 
 ```php {*|8-9|*}{lines:true}
 <?php
@@ -430,7 +430,7 @@ transition: fade
 ---
 
 # テスト5️⃣ （持ち時間 ⏱️5秒）
-値を指定しない場合はどうなるのか？ 🤔
+値を指定しない場合はどうなるのか？　🤔
 
 ```php {*|4,9,10|5,11,12|6,13,14|*}{lines:true}
 <?php
@@ -1279,7 +1279,7 @@ transition: slide-up
 ---
 
 # テスト⑭
-sendと使い分け難しいかもだけれども😅
+send と使い分け難しいかもだけれども😅
 
 - `throw()` メソッドで<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">ジェネレータ内に例外を注入</span>します💉
 - 注入された例外は、<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">ジェネレータ内の実行中のコンテキストで発生</span>します💥
