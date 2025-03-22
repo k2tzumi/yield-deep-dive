@@ -100,7 +100,7 @@ transition: fade-out
 ---
 
 
-# お願い
+# お願い 🙏
 
 写真撮影、SNS での実況について
 
@@ -138,14 +138,14 @@ layout: default
 transition: slide-up
 ---
 
-# Yield is 何？
+# Yield is 何？🤔
 一言で言うと...
 
-「**データを一つずつ返す仕組み**」
+「**データを一つずつ返す仕組み**」 🔄
 
 ---
 
-# ジェネレータ関数の特徴
+# ジェネレータ関数の特徴 ✨
 
 - 関数の実行を一時停止できる 🛑
 - メモリ効率が良い 💾
@@ -154,7 +154,7 @@ transition: slide-up
 
 ---
 
-# 基本的な構文
+# 基本的な構文📝
 
 ```php {*|1-5|7-9|2,8|3,8|4,8}{lines:true}
 function myGenerator() {
@@ -170,7 +170,7 @@ foreach (myGenerator() as $value) {
 
 ---
 
-# 他の言語の類似機能
+# 他の言語の類似機能🌎
 
 - JavaScript: Generator functions
 - Python: Generators
@@ -182,28 +182,28 @@ layout: section
 transition: fade-out
 ---
 
-# yieldテスト始めるよ
+# yieldテスト始めるよ🎮
 
 ---
 layout: statement
 transition: fade-out
 ---
 
-# 訓練されたPHPerなら余裕で答えられるよね？
+# 訓練されたPHPerなら余裕で答えられるよね？😎
 
 ---
 layout: statement
 transition: slide-up
 ---
 
-# 提示するコードが正常終了するか？お考えください
-`assert` 関数が全て `true` になると思ったら、ペンライトを振ってください！
+# 提示するコードが正常終了するか？お考えください🌈
+`assert` 関数が全て `true` になると思ったら、サイリウムを振ってください！🏁
 
 ---
 transition: fade
 ---
 
-# テスト1️⃣ （持ち時間5秒）
+# テスト1️⃣ （持ち時間⏱️5秒）
 変動する変数の値が返却されるよ！
 
 ```php {*|2,8|3,12|4,13|5,14|*}{lines:true}
@@ -240,14 +240,14 @@ transition: slide-up
 ---
 
 # テスト1️⃣
-インクリメントの挙動の確認でした！
+インクリメントの挙動の確認でした！🔢
 
 ---
 transition: fade
 ---
 
-# テスト2️⃣ （持ち時間10秒）
-値だけじゃなくてキーも返せるよ
+# テスト2️⃣ （持ち時間⏱️10秒）
+値だけじゃなくてキーも返せるよ🗝️
 
 ```php {*|3,8-9,14|4,8-9,13|5,8-9,12|*}{lines:true}
 <?php
@@ -296,11 +296,11 @@ transition: slide-up
 ---
 
 # テスト2️⃣
-ひっかけ問題すみません。
+ひっかけ問題すみません😅
 
-リスト（キー指定していない `$expected`）の配列キーは 0 から始まるよね。  
-以下なら Success。  
-厳密比較( `===` )すると Fail です。
+リスト（キー指定していない `$expected`）の <span v-mark.circle.red="1">配列キーは 0 から始まる</span>よね。  
+以下のコードなら Success ✅️  
+並び順を揃えると厳密比較( `===` )させてもOK🙆
 
 ```php {*|3-5|12-14|16}{lines:true}
 <?php
@@ -328,8 +328,8 @@ assert($expected === $actual, var_export($actual, true));
 transition: fade
 ---
 
-# テスト3️⃣ （持ち時間5秒）
-テスト 1️⃣のケースでもキーをつけるとどうなるのかな？
+# テスト3️⃣ （持ち時間⏱️5秒）
+テスト 1️⃣のケースでもキーをつけるとどうなるのかな？ 🤨
 
 ```php {*|8-9|*}{lines:true}
 <?php
@@ -367,15 +367,15 @@ transition: slide-up
 
 # テスト3️⃣
 
-いい感じにキーを採番してくれます
+いい感じにキーを採番してくれます🔢
 
 
 ---
 transition: fade
 ---
 
-# テスト4️⃣ （持ち時間5秒）
-キーあり、なしの組み合わせ行うとどうなるか？
+# テスト4️⃣ （持ち時間⏱️5秒）
+キーあり、なしの組み合わせ行うとどうなるか？🔄
 
 ```php {*|3,5,6,10,12,13,17,18|4,7,11,14,17,18|*}{lines:true}
 <?php
@@ -415,22 +415,22 @@ transition: slide-up
 ---
 
 # テスト4️⃣
-PHP の配列のキーって文字列と数値が混在させることが出来てアレ
+PHP の配列のキーって文字列と数値が混在させることが出来てアレ 🤯
 
 キー指定がない場合、以下のルールで数値キーが自動採番させれます
 
-- キーを指定しない場合、自動的に連番(0 から) が振られる  
+- <span v-mark="{ at: 1, color: 'orange', type: 'underline', strokeWidth: 3 }">キー指定がない場合</span>、自動的に<span v-mark="{ at: 2, color: '#FCAF17', type: 'highlight', iterations: 3}">連番(0 から) が振られる</span> 📈  
 `[ 'one' => 1]` の次が `[ 0 => 2 ]`  
 `yield 2` のあとに `yield 2.5` を追加した場合は　`[ 1 => 2.5 ]`　が結果に追加となる
-- 数値キーがあった場合に、そこからの連番になる  
+- 但し、<span v-mark="{ at: 3, color: 'yellow', type: 'highlight', strokeWidth: 2, multiline: true }">直前のキーが数値キーがだった場合は、そこからの連番</span>になる 🔄  
 `[ 4 => 'four']` の次が `[ 5 => 5 ]`
 
 ---
 transition: fade
 ---
 
-# テスト5️⃣ （持ち時間5秒）
-値を指定しない場合はどうなるのか？
+# テスト5️⃣ （持ち時間 ⏱️5秒）
+値を指定しない場合はどうなるのか？ 🤔
 
 ```php {*|4,9,10|5,11,12|6,13,14|*}{lines:true}
 <?php
@@ -477,12 +477,12 @@ transition: slide-up
 ---
 
 # テスト5️⃣
-switch 文だと break しないと連続して yield されるので注意
+switch 文だと break しないと連続して yield されるので注意⚠️
 
 2 回目の assert は　`[ 0 => null ]` になる
-- `yield null` する場合と同義  
+- <span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">`yield null` する場合と同義</span>💫  
 null が返却される
-- `return` はまた挙動が違う  
+- <span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">`return` はまた挙動が違う</span>  
 要素自体が返却されない
 
 
@@ -491,22 +491,22 @@ layout: section
 transition: fade-out
 ---
 
-# ここまで余裕だよね？
+# ここまで余裕だよね？😎
 
 ---
 layout: statement
 transition: fade-out
 ---
 
-# 少しだけ難易度上げるよ
+# 少しだけ難易度上げるよ📈
 
 
 ---
 transition: fade
 ---
 
-# テスト6️⃣ （持ち時間10秒）
-yield from という書き方もあります
+# テスト6️⃣ （持ち時間 ⏱️10秒）
+yield from という書き方もあります📦
 
 ```php {*|3,4,8,14|10,16|*}{lines:true}
 <?php
@@ -547,19 +547,22 @@ transition: slide-up
 ---
 
 # テスト6️⃣
-まとめて yield させることもできます
+まとめて yield させることもできます📦
 
 yield from キーワードを使ってジェネレータの委譲が出来ます。
 
- 外側のジェネレータは、内側のジェネレータ (あるいはオブジェクトや配列) から受け取れるすべての値を yield し、 何も取得できなくなったら外側のジェネレータの処理を続行します。
+<blockquote>
+<p>外側のジェネレータは、内側のジェネレータ (あるいはオブジェクトや配列) から受け取れるすべての値を yield し、</p>
+<p>何も取得できなくなったら外側のジェネレータの処理を続行します。</p>
+</blockquote>
 
 
 ---
 transition: fade
 ---
 
-# テスト7️⃣ （持ち時間10秒）
-yield from でキー指定ありなしを混在させるとどうなるか？
+# テスト7️⃣ （持ち時間⏱️10秒）
+yield from でキー指定ありなしを混在させるとどうなるか？🧩
 
 ```php {*|3,4,12,14,17,19|7,8,11,13,16,18|*}{lines:true}
 <?php
@@ -618,42 +621,42 @@ transition: slide-up
 ---
 
 # テスト7️⃣ 
-結果わかりづらいけれど。。
+結果わかりづらいけれど。。 🤨
 
-- キーの自動採番ルールはジェネレータ関数毎に適用される  
-mixedGenerator と generatorWithoutKeys のキーの採番は独立する
-- yield from で委譲した結果のキーは引き継がれる  
+- キーの自動採番ルールはジェネレータ関数毎に適用される🔑  
+mixedGenerator と generatorWithoutKeys の<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">キーの採番は独立</span>する
+- yield from で委譲した結果のキーは引き継がれる 🚀  
 generatorWithoutKeys の結果が　`[ 2 => 3, 3 => 4]` ではなく `[ 0 => 3, 1 => 4]`
-- ジェネレータのキーの重複は OK  
+- <span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">ジェネレータのキーの重複は OK 👌</span>  
 通常の array では定義出来ないけれど、以下が返却されている  
 `[ 0 => 3, 1 => 4, 'a' => 1, 'b' => 2, 0 => 3, 1 => 4, 'c' => 7, 'd' => 8]`  
-キーの 0 と 1 が重複して出現している
+<span v-mark="{ at: 3, color: 'yellow', type: 'highlight', strokeWidth: 3 }">キーの 0 と 1 が重複</span>して出現している
 
 ---
 layout: section
 transition: fade-out
 ---
 
-# まだまだ中級だね
+# まだまだ中級だね🎯
 
 ---
 layout: section
 transition: fade-out
 ---
 
-# 基本構文だけじゃきついかな？ｗｗｗ
-Iteratorインターフェースを覚えよう
+# 基本構文だけじゃきついかな？ｗｗｗ😉
+Iterator インターフェースを覚えよう 📚
 
 ---
 
 # イテレータとは？
 一言で言うと...
 
-「**コレクションを順番に処理するための仕組み**」
+「**コレクションを順番に処理するための仕組み**」🔄
 
 ---
 
-# イテレータの特徴
+# イテレータの特徴✨
 
 - データを **一つずつ** 取り出せる 🔄
 - 内部状態を保持している 📝
@@ -662,7 +665,7 @@ Iteratorインターフェースを覚えよう
 
 ---
 
-# PHPのIteratorインターフェース
+# PHPのIteratorインターフェース 📜
 
 ```php {*}{lines:true}
 interface Iterator extends Traversable {
@@ -676,7 +679,7 @@ interface Iterator extends Traversable {
 
 ---
 
-# イテレータの実装例
+# イテレータの実装例📝
 
 ```php {*}{lines:true}
 // カスタムイテレータ
@@ -699,8 +702,8 @@ while ($it->valid()) {
 transition: slide-up
 ---
 
-# Iteratorインターフェースと関連クラス図
-GeneratorクラスはIteratorインターフェースを実装しています
+# Iteratorインターフェースと関連クラス図🗺️
+Generator クラスは Iterator インターフェースを実装しています
 
 ```mermaid
 classDiagram
@@ -805,8 +808,8 @@ classDiagram
 transition: fade
 ---
 
-# テスト8️⃣ （持ち時間10秒）
-return を組み合わせて利用する
+# テスト8️⃣ （持ち時間⏱️10秒）
+return を組み合わせて利用する🔀
 
 ```php {*|6,12|3-5,10|6,13|*}{lines:true}
 <?php
@@ -853,25 +856,28 @@ transition: slide-up
 ---
 
 # テスト8️⃣
-返り値と生成値は独立しています
+返り値と生成値は独立しています🏝️
 
-- ジェネレータの返り値は foreach ループでは取得できない  
-return の返り値は無視される
-- 専用の `getReturn()` メソッドを使う必要がある  
+- ジェネレータの返り値は foreach ループでは取得できない🙅  
+<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">return の返り値は無視</span>される
+- 専用の<span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }"> `getReturn()` メソッドを使う</span>必要がある🤟  
 `['a' => 4, 'b' => 5]` が返り値として取得できる
-- `getReturn()` を使うには、ジェネレータを完全に消費（全ての yield を処理）する必要がある  
-途中で break した場合は例外が発生する
+- `getReturn()` を使うには、ジェネレータを<span v-mark="{ at: 2, color: 'yellow', type: 'highlight', strokeWidth: 3 }">完全に消費（全ての yield を処理）する必要</span>がある  
+途中で break した場合は例外が発生する🛑
 
-【実用的な使用例】  
-ジェネレータで大量のデータを処理し、最後に集計結果や処理状態を返す
+<div class="box-text-memo">
+【実用的な使用例】<br />  
+ジェネレータで大量のデータを処理し、最後に集計結果や処理状態を返す<br />
 例外処理と組み合わせて、エラー情報や処理結果を返す
+</div>
+
 
 ---
 transition: fade
 ---
 
-# テスト9️⃣ （持ち時間5秒）
-ジェネレータ関数を連続で呼び出した場合
+# テスト9️⃣ （持ち時間⏱️5秒）
+ジェネレータ関数を連続で呼び出した場合🧵
 
 ```php {*|2-7|8-11|12-14|15-|*}{lines:true}
 <?php
@@ -919,11 +925,11 @@ transition: slide-up
 # テスト9️⃣
 use は値渡し
 
-- クロージャで `use($i)` としているため、値渡しでキャプチャされる
-- クロージャ内で `$i++` を使っていても、外部の `$i` に影響しない
-- 各ジェネレータインスタンスは独自のコピーの `$i` を持つ
-- 各インスタンス内での増分は、そのインスタンスにのみ影響する
-- 2 回目の assert びジェネレータ関数は再実行。3 回目は連続して呼び出していたのでエラーになった  
+- クロージャで `use($i)` としているため、<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">値渡し</span>でキャプチャされる📌
+- クロージャ内で `$i++` を使っていても、<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">外部の `$i` に影響しない</span>
+- 各ジェネレータインスタンスは独自のコピーの `$i` を持つ🖨️
+- 各インスタンス内での増分は、そのインスタンスにのみ影響する🔒
+- 2 回目の assert 及びジェネレータ関数は再実行↩️。3 回目は連続での呼び出しだったのでエラーになった🚫  
 `Cannot traverse an already closed generator`
 
 ---
@@ -931,21 +937,21 @@ layout: section
 transition: fade-out
 ---
 
-# ギブアップしてもいいのよ？
+# ギブアップしてもいいのよ？😅
 
 ---
 layout: section
 transition: fade-out
 ---
 
-# 一気に難易度あげちゃうよ
+# 一気に難易度あげちゃうよ⤴️
 
 ---
 transition: fade
 ---
 
-# テスト🔟 （持ち時間10秒）
-テスト 9️⃣を参照渡しにするとどうなるか？
+# テスト🔟 （持ち時間⏱️10秒）
+テスト 9️⃣を参照渡しにするとどうなるか？🤔
 
 ```php {*|3|8-11|12-14|15-17|*}{lines:true}
 <?php
@@ -993,22 +999,22 @@ transition: slide-up
 ---
 
 # テスト🔟 
-途中まで期待通りだったが。。
+途中まで期待通りだったが。。🤷‍♂️
 
-- use で参照渡しにすると 1 回目と 2 回目のループの結果が変わってくる（期待通り）  
+- use で参照渡しにすると 1 回目と 2 回目のループの結果が変わってくる（期待通り）🌟  
 2 回目は別シーケンスとして動作する
-- ジェネレータ関数に対して一度使用した後に `rewind()` は呼び出せない  
+- ジェネレータ関数に対して一度使用した後に `rewind()` は呼び出せない🛑  
 PHP のジェネレータ関数はシングルパス（一方通行）のイテレータとして実装されている  
-[オフィシャルドキュメント](https://www.php.net/manual/ja/generator.rewind.php) で `イテレータを巻き戻す` となっているのが罠  
+[オフィシャルドキュメント](https://www.php.net/manual/ja/generator.rewind.php) で `イテレータを巻き戻す` となっているのが罠🪤  
 Generator オブジェクトだったら問題ない！
-- 正しい使い方としては、新しいジェネレータインスタンスを作成する必要がある
+- 正しい使い方としては、新しいジェネレータインスタンスを作成する必要がある🆕
 
 ---
 transition: fade
 ---
 
-# テスト⑪ （持ち時間10秒）
-foreach を使わずに手続き的に書いてみる
+# テスト⑪ （持ち時間⏱️10秒）
+foreach を使わずに手続き的に書いてみる🧮
 
 ```php {*|2,7,8|4,9-11|5,12-14|6,15-|*}{lines:true}
 <?php
@@ -1046,21 +1052,21 @@ transition: slide-up
 ---
 
 # テスト⑪
-foreach の内部がどうやって動いているか、おわかり頂けただろうか？
+foreach の内部がどうやって動いているか、おわかり頂けただろうか？👀
 
-- `rewind()` は最初の yield までコードを実行する  
+- <span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">`rewind()` は最初の yield まで</span>コードを実行する⏯️  
 `rewind()` を呼び出さなくて直接　`current()` を呼び出しても問題なし
-- 2 回目以降の `rewind()` は実際にジェネレーター関数をリセットしない  
-例外が発生する（前述の通り）
-- `next()` を呼ぶたびに次の `yield` まで進む
+- 2 回目以降の `rewind()` は実際にジェネレーター関数をリセットしない ⚠️  
+例外が発生する（前述の通り）🚫
+- <span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">`next()` を呼ぶたびに次の `yield` まで</span>進む ⏭️  
 最後の `yield` の後に `next()` を呼ぶと `valid()` が `false` になる
-- `current()` と `key()` は現在の要素のものにアクセスできる  
+- <span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">`current()` と `key()` は現在の要素</span>のものにアクセスできる🔍  
 呼び出す前に既に生成自体は完了している
 
 ---
 
 # テスト⑪
-Iterator インターフェースを利用して for 文で書き直す！
+Iterator インターフェースを利用して for 文で書き直す！🗒️
 
 ```php {*|9-11}{lines:true}
 <?php
@@ -1090,21 +1096,21 @@ layout: section
 transition: fade-out
 ---
 
-# おわりだよ
+# おわりだよ 🏁
 
 ---
 layout: section
 transition: fade-out
 ---
 
-# いや嘘だよ
+# いや嘘だよ😜
 
 ---
 transition: fade
 ---
 
-# テスト⑫ （持ち時間10秒）
-参照を返すジェネレータだと。。？
+# テスト⑫ （持ち時間⏱️10秒）
+参照を返すジェネレータだと。。？📎
 
 ```php {*|2,11|3,4,17|5,6,13,14,18|7,8,13,14,19|*}{lines:true}
 <?php
@@ -1159,22 +1165,22 @@ transition: slide-up
 ---
 
 # テスト⑫
-関数からリファレンスを返すのは PHP 標準機能！yield と組み合わせると強力
+関数からリファレンスを返すのは PHP 標準機能！yield と組み合わせると強力💪
 
-- 参照を返すジェネレータの定義方法  
-関数名と値を参照する変数の前に `&` を付ける
-- 参照を返すジェネレータでも、キーは参照として扱われない制限がある  
+- 参照を返すジェネレータの定義方法📝  
+<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">関数名と値を参照する変数の前に `&` を付ける</span>
+- 参照を返すジェネレータでも、キーは参照として扱われない制限がある⚠️  
  `&` を付けちゃうと `Key element cannot be a reference` と怒られる  
-- 値を受け取る変数の上書きすると、ジェネレータ内の値も更新される  
+- 値を受け取る変数の上書きすると、<span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">ジェネレータ内の値も更新</span>される🔄  
 10 倍してプラスするという挙動となる
-- キー値は値渡しになるので上書きしても変動しない
+- <span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">キー値は</span>値渡しになるので上書きしても<span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">変動しない</span>
 
 ---
 transition: fade
 ---
 
-# テスト⑬ （持ち時間10秒）
-双方向通信をもっとスマートにやるには？
+# テスト⑬ （持ち時間⏱️10秒）
+双方向通信をもっとスマートにやるには？📡
 
 ```php {*|6,16,17|2-6,15,20|6,9,16,20|6,8,17,20|6,8,18-20|*}{lines:true}
 <?php
@@ -1216,24 +1222,24 @@ transition: slide-up
 ---
 
 # テスト⑬
-ジェネレータを単なるデータ生成以上の使い方ができる非常に強力な機能
+ジェネレータを単なるデータ生成以上の使い方ができる非常に強力な機能🔥
 
-- 処理の動的な制御  
-  - イテレーション中にジェネレータの動作をパラメータで調整できる
+- 処理の動的な制御⚡️  
+  - イテレーション中に<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">ジェネレータの動作をパラメータで調整</span>できる
   - 条件に基づいて異なるデータセットを生成可能
-- ステートマシンの実装  
-  - ジェネレータが状態を保持し、外部からの入力に応じて状態遷移できる
+- ステートマシンの実装 ⚙️  
+  - ジェネレータが状態を保持し、<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">外部からの入力に応じて状態遷移</span>できる
   - コールバックやオブザーバーパターンの代替として使える
-- 遅延評価と動的計算  
-  - 計算の一部を遅延させ、必要なときに外部からパラメータを与えられる  
+- 遅延評価と動的計算 ⏳  
+  - 計算の一部を遅延させ、<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">必要なときに外部からパラメータを与えられる</span>  
   - 複雑な計算を段階的に進められる
 
 ---
 transition: fade
 ---
 
-# テスト⑭ （持ち時間10秒）
-例外も差し込めたりする
+# テスト⑭ （持ち時間⏱️10秒）
+例外も差し込めたりする🚨
 
 ```php {*|15|2-7,13,17|6,8-10,15,18|*}{lines:true}
 <?php
@@ -1273,29 +1279,29 @@ transition: slide-up
 ---
 
 # テスト⑭
-throw
+sendと使い分け難しいかもだけれども😅
 
-- `throw()` メソッドでジェネレータ内に例外を注入します
-- 注入された例外は、ジェネレータ内の実行中のコンテキストで発生します
-- ジェネレータ内で例外をキャッチしない場合、例外は呼び出し元に伝播します
+- `throw()` メソッドで<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">ジェネレータ内に例外を注入</span>します💉
+- 注入された例外は、<span v-mark="{ at: 1, color: 'orange', type: 'box', strokeWidth: 3 }">ジェネレータ内の実行中のコンテキストで発生</span>します💥
+- ジェネレータ内で<span v-mark="{ at: 1, color: 'orange', type: 'underline', strokeWidth: 3 }">例外をキャッチしない場合、例外は呼び出し元に伝播</span>します🌬️
 
-
----
-layout: section
-transition: fade-out
----
-
-# ここまでできたなら
 
 ---
 layout: section
 transition: fade-out
 ---
 
-# 合格
+# ここまでできたなら 🏆
+
+---
+layout: section
+transition: fade-out
+---
+
+# 合格🎓✨
 
 ---
 layout: end
 ---
 
-# Fin
+# Fin🎬
