@@ -929,7 +929,8 @@ use は値渡し
 - クロージャ内で `$i++` を使っていても、<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">外部の `$i` に影響しない</span>
 - 各ジェネレータインスタンスは独自のコピーの `$i` を持つ🖨️
 - 各インスタンス内での増分は、そのインスタンスにのみ影響する🔒
-- 2 回目の assert 及びジェネレータ関数は再実行↩️。3 回目は連続での呼び出しだったのでエラーになった🚫  
+- 2 回目の assert 及びジェネレータ関数は再実行↩️。3 回目は連続での呼び出し📣
+- <span v-mark="{ at: 2, color: 'yellow', type: 'highlight', strokeWidth: 3 }">関数オブジェクトを連続的に呼び出すとエラー</span>になる🚫  
 `Cannot traverse an already closed generator`
 
 ---
@@ -1003,11 +1004,11 @@ transition: slide-up
 
 - use で参照渡しにすると 1 回目と 2 回目のループの結果が変わってくる（期待通り）🌟  
 2 回目は別シーケンスとして動作する
-- ジェネレータ関数に対して一度使用した後に `rewind()` は呼び出せない🛑  
+- ジェネレータ関数に対して<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">一度使用した後に `rewind()` は呼び出せない</span>🛑  
 PHP のジェネレータ関数はシングルパス（一方通行）のイテレータとして実装されている  
 [オフィシャルドキュメント](https://www.php.net/manual/ja/generator.rewind.php) で `イテレータを巻き戻す` となっているのが罠🪤  
 Generator オブジェクトだったら問題ない！
-- 正しい使い方としては、新しいジェネレータインスタンスを作成する必要がある🆕
+- 正しい使い方としては、<span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">新しいジェネレータインスタンスを作成する必要</span>がある🆕
 
 ---
 transition: fade
