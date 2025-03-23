@@ -27,7 +27,7 @@ addons:
 # 時間の許す限りyieldの挙動を説明する
 
 PHPerKaigi 2025 Mar 23, 2025.  
-v0.0.1  
+v0.0.2  
 @katzumi(かつみ)
 
 <div class="pt-12">
