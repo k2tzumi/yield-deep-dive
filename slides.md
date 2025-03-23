@@ -182,7 +182,7 @@ layout: section
 transition: fade-out
 ---
 
-# yieldテスト始めるよ🎮
+# yieldテスト始めるよ🎵
 
 ---
 layout: statement
@@ -192,12 +192,18 @@ transition: fade-out
 # 訓練されたPHPerなら余裕で答えられるよね？😎
 
 ---
-layout: statement
+layout: image-right
+image: https://pbs.twimg.com/media/Gmof92JakAAnsla?format=jpg
+backgroundSize: contain
 transition: slide-up
 ---
 
 # 提示するコードが正常終了するか？お考えください🌈
 `assert` 関数が全て `true` になると思ったら、サイリウムを振ってください！🏁
+
+<!--
+refs: https://x.com/kotomin_m/status/1903368944800661992
+-->
 
 ---
 transition: fade
@@ -359,6 +365,7 @@ transition: fade
 ---
 
 # ✅️ Assert Success!
+通常の list な array でも foreach でキーは使えますしね
 
 ---
 layout: center
@@ -408,6 +415,7 @@ transition: fade
 ---
 
 # ✅️ Assert Success!
+失敗すると思ったでしょ？
 
 ---
 layout: center
@@ -627,10 +635,12 @@ transition: slide-up
 mixedGenerator と generatorWithoutKeys の<span v-mark="{ at: 1, color: 'orange', type: 'circle', strokeWidth: 3 }">キーの採番は独立</span>する
 - yield from で委譲した結果のキーは引き継がれる 🚀  
 generatorWithoutKeys の結果が　`[ 2 => 3, 3 => 4]` ではなく `[ 0 => 3, 1 => 4]`
-- <span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">ジェネレータのキーの重複は OK 👌</span>  
+- <span v-mark="{ at: 2, color: 'orange', type: 'underline', strokeWidth: 3 }">ジェネレータではキーの重複は OK 👌</span>  
 通常の array では定義出来ないけれど、以下が返却されている  
 `[ 0 => 3, 1 => 4, 'a' => 1, 'b' => 2, 0 => 3, 1 => 4, 'c' => 7, 'd' => 8]`  
-<span v-mark="{ at: 3, color: 'yellow', type: 'highlight', strokeWidth: 3 }">キーの 0 と 1 が重複</span>して出現している
+<span v-mark="{ at: 3, color: 'yellow', type: 'highlight', strokeWidth: 3 }">キーの 0 と 1 が重複</span>して出現している。  
+結果として配列の要素が上書きされて、失敗した。
+
 
 ---
 layout: section
@@ -704,7 +714,12 @@ transition: slide-up
 
 # Iteratorインターフェースと関連クラス図🗺️
 Generator クラスは Iterator インターフェースを実装しています
+<Transform :scale="0.8">
+<img src="/class-map.png" />
+</Transform>
 
+
+<!--
 ```mermaid
 classDiagram
     class Traversable {
@@ -802,7 +817,7 @@ classDiagram
     OuterIterator <|-- FilterIterator
     IteratorIterator <|-- FilterIterator
 ```
-
+-->
 
 ---
 transition: fade
